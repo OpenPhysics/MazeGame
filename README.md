@@ -5,14 +5,15 @@ simulation. Drive a particle through tile-based mazes using **Position**, **Velo
 **Acceleration** control modes, drag the knob in the control pad, drag the particle (Position
 mode), or use arrow keys / WASD.
 
-## Requirements
+## Features
 
-- Node.js **22+** (see `.nvmrc`; Vite 8 needs 20.19+ or 22.12+)
-
-If `npm run build` fails with **Cannot find native binding** for Rolldown, run
-`rm -rf node_modules && npm ci` (the `postinstall` script installs the native binding for your
-OS). On WSL/Linux x64, `@rolldown/binding-linux-x64-gnu` is also listed as a dev dependency.
-
+- Four levels (Practice through Certain Death)
+- English and French UI (switch locale in sim preferences)
+- Projector (light) color profile
+- Interactive description (PDOM), screen summary, dynamic alerts, keyboard help
+- Sound effects and velocity sonification; optional particle trace preference
+- PWA: installable and offline-capable after first load (`vite-plugin-pwa`)
+  
 ## Quick Start
 
 ```bash
@@ -36,14 +37,7 @@ npm start        # dev server → http://localhost:5173
 | `npm run icons` | Regenerate PNG icons from `icons/icon.svg` |
 | `npm run clean` | Remove `dist/` |
 
-## Features
 
-- Four levels (Practice through Certain Death)
-- English and French UI (switch locale in sim preferences)
-- Projector (light) color profile
-- Interactive description (PDOM), screen summary, dynamic alerts, keyboard help
-- Sound effects and velocity sonification; optional particle trace preference
-- PWA: installable and offline-capable after first load (`vite-plugin-pwa`)
 
 ## Architecture
 
