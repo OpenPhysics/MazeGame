@@ -54,7 +54,11 @@ const MazeGameColors = {
   goalTileSheenColorProperty: profileColor("goalTileSheen", "rgba(255,255,255,0.28)", "rgba(255,255,255,0.4)"),
   goalTileShadowColorProperty: profileColor("goalTileShadow", "rgba(0,0,0,0.28)", "rgba(0,0,0,0.18)"),
   goalBackdropGlowColorProperty: profileColor("goalBackdropGlow", "rgba(255,255,255,0.35)", "rgba(255,255,255,0.45)"),
-  goalBackdropGlowMidColorProperty: profileColor("goalBackdropGlowMid", "rgba(255,255,255,0.1)", "rgba(255,255,255,0.15)"),
+  goalBackdropGlowMidColorProperty: profileColor(
+    "goalBackdropGlowMid",
+    "rgba(255,255,255,0.1)",
+    "rgba(255,255,255,0.15)",
+  ),
 
   // Control-pad colors. Same hue across themes (matches the original sim).
   positionVectorProperty: profileColor("positionVector", "#2575BA", "#2575BA"),

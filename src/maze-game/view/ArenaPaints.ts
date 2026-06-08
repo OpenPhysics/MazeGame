@@ -18,12 +18,14 @@ function toColor(paint: Color | string): Color {
 
 const goalStarFillLightColorProperty = new DerivedProperty(
   [MazeGameColors.goalStarFillColorProperty],
-  (color: Color | string): Color => toColor(color).brighterColor(MazeGameLayoutConstants.ARENA_GOAL_STAR_FACET_BRIGHTEN_FACTOR),
+  (color: Color | string): Color =>
+    toColor(color).brighterColor(MazeGameLayoutConstants.ARENA_GOAL_STAR_FACET_BRIGHTEN_FACTOR),
 );
 
 const goalStarFillDarkColorProperty = new DerivedProperty(
   [MazeGameColors.goalStarFillColorProperty],
-  (color: Color | string): Color => toColor(color).darkerColor(MazeGameLayoutConstants.ARENA_GOAL_STAR_FACET_DARKEN_FACTOR),
+  (color: Color | string): Color =>
+    toColor(color).darkerColor(MazeGameLayoutConstants.ARENA_GOAL_STAR_FACET_DARKEN_FACTOR),
 );
 
 /**
@@ -164,8 +166,7 @@ export function createGoalOverlayNode(tileSizeView: number): Node {
 
   const center = size / 2;
   const ringStroke = Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_RING_STROKE_RATIO);
-  const [outerRadiusRatio, middleRadiusRatio, innerRadiusRatio] =
-    MazeGameLayoutConstants.ARENA_GOAL_RING_RADIUS_RATIOS;
+  const [outerRadiusRatio, middleRadiusRatio, innerRadiusRatio] = MazeGameLayoutConstants.ARENA_GOAL_RING_RADIUS_RATIOS;
 
   const glowRadius = Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_BACKDROP_GLOW_RADIUS_RATIO);
   const backdropGlow = new Circle(glowRadius, {
@@ -209,7 +210,10 @@ export function createGoalOverlayNode(tileSizeView: number): Node {
   const dashedRing = new Path(dashedRingShape, {
     stroke: MazeGameColors.goalMarkerColorProperty,
     lineWidth: ringStroke,
-    lineDash: [size * MazeGameLayoutConstants.ARENA_GOAL_DASHED_RING_DASH_RATIO, size * MazeGameLayoutConstants.ARENA_GOAL_DASHED_RING_DASH_RATIO],
+    lineDash: [
+      size * MazeGameLayoutConstants.ARENA_GOAL_DASHED_RING_DASH_RATIO,
+      size * MazeGameLayoutConstants.ARENA_GOAL_DASHED_RING_DASH_RATIO,
+    ],
     pickable: false,
   });
 
