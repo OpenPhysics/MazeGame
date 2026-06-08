@@ -134,7 +134,12 @@ export default class ControlPanel extends Panel {
           },
         },
       ],
-      { orientation: "horizontal", spacing: MazeGameLayoutConstants.CONTROL_PANEL_TAB_SPACING, tandem },
+      {
+        orientation: "horizontal",
+        spacing: MazeGameLayoutConstants.CONTROL_PANEL_TAB_SPACING,
+        tandem,
+        radioButtonOptions: { baseColor: MazeGameColors.tabButtonFillProperty },
+      },
     );
     const padBackground = new Rectangle(-HALF, -HALF, AREA, AREA, {
       fill: MazeGameColors.padFillProperty,

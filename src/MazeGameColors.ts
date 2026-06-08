@@ -60,10 +60,13 @@ const MazeGameColors = {
     "rgba(255,255,255,0.15)",
   ),
 
-  // Control-pad colors. Same hue across themes (matches the original sim).
-  positionVectorProperty: profileColor("positionVector", "#2575BA", "#2575BA"),
-  velocityVectorProperty: profileColor("velocityVector", "#CD2520", "#CD2520"),
-  accelerationVectorProperty: profileColor("accelerationVector", "#349E34", "#349E34"),
+  // Control-pad colors. Dark mode uses lighter/brighter variants for contrast against dark buttons.
+  positionVectorProperty: profileColor("positionVector", "#6EB5FF", "#1A5B9E"),
+  velocityVectorProperty: profileColor("velocityVector", "#FF7572", "#A51A16"),
+  accelerationVectorProperty: profileColor("accelerationVector", "#5CD65C", "#1B6B1B"),
+
+  // Radio button fill for the mode tabs.
+  tabButtonFillProperty: profileColor("tabButtonFill", new Color(58, 58, 58), new Color(245, 245, 245)),
 
   // Drag-pad surface inside the control panel.
   padFillProperty: profileColor("padFill", "rgba(255,255,255,0.5)", "rgba(255,255,255,0.85)"),

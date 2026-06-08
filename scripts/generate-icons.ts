@@ -6,10 +6,10 @@
  *   npm run icons
  *
  * Outputs:
- *   icons/icon-192.png             — Android home screen icon
- *   icons/icon-512.png             — Splash screen / high-res icon
- *   icons/apple-touch-icon.png     — iOS home screen icon (180×180)
- *   favicon.ico                    — Browser tab icon
+ *   public/icons/icon-192.png             — Android home screen icon
+ *   public/icons/icon-512.png             — Splash screen / high-res icon
+ *   public/icons/apple-touch-icon.png     — iOS home screen icon (180×180)
+ *   public/favicon.ico                    — Browser tab icon
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -21,10 +21,10 @@ import sharp from "sharp";
 const dirName = dirname(fileURLToPath(import.meta.url));
 const root = resolve(dirName, "..");
 
-const svgPath = resolve(root, "icons/icon.svg");
+const svgPath = resolve(root, "public/icons/icon.svg");
 const svgBuffer = readFileSync(svgPath);
 
-mkdirSync(resolve(root, "icons"), { recursive: true });
+mkdirSync(resolve(root, "public/icons"), { recursive: true });
 
 const pngSizes: Array<{ name: string; size: number }> = [
   { name: "icon-192.png", size: 192 },
@@ -36,13 +36,13 @@ for (const { name, size } of pngSizes) {
   await sharp(svgBuffer)
     .resize(size, size)
     .png()
-    .toFile(resolve(root, "icons", name));
-  console.log(`✓ icons/${name}`);
+    .toFile(resolve(root, "public/icons", name));
+  console.log(`✓ public/icons/${name}`);
 }
 
 const faviconPng = await sharp(svgBuffer).resize(32, 32).png().toBuffer();
 const icoBuffer = await pngToIco([faviconPng]);
-writeFileSync(resolve(root, "favicon.ico"), icoBuffer);
-console.log("✓ favicon.ico");
+writeFileSync(resolve(root, "public/favicon.ico"), icoBuffer);
+console.log("✓ public/favicon.ico");
 
 console.log("\nAll icons generated successfully.");

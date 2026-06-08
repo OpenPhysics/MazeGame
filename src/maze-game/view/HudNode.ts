@@ -64,6 +64,8 @@ export default class HudNode extends Panel {
       {
         decimalPlaces: 0,
         align: "right",
+        backgroundFill: "rgba(0,0,0,0)",
+        backgroundStroke: null,
         textOptions: {
           font: new PhetFont(MazeGameLayoutConstants.HUD_VALUE_FONT_SIZE),
           fill: MazeGameColors.foregroundColorProperty,
