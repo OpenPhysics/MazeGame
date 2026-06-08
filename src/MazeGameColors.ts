@@ -51,8 +51,10 @@ const MazeGameColors = {
   // Goal tile overlay (rings, star, stripes).
   goalMarkerColorProperty: profileColor("goalMarker", "rgba(255,255,255,0.85)", "rgba(255,255,255,0.9)"),
   goalStarFillColorProperty: profileColor("goalStarFill", "rgba(255,235,120,0.9)", "rgba(255,248,180,0.95)"),
-  goalStripeColorProperty: profileColor("goalStripe", "rgba(255,255,255,0.22)", "rgba(255,255,255,0.35)"),
   goalTileSheenColorProperty: profileColor("goalTileSheen", "rgba(255,255,255,0.28)", "rgba(255,255,255,0.4)"),
+  goalTileShadowColorProperty: profileColor("goalTileShadow", "rgba(0,0,0,0.28)", "rgba(0,0,0,0.18)"),
+  goalBackdropGlowColorProperty: profileColor("goalBackdropGlow", "rgba(255,255,255,0.35)", "rgba(255,255,255,0.45)"),
+  goalBackdropGlowMidColorProperty: profileColor("goalBackdropGlowMid", "rgba(255,255,255,0.1)", "rgba(255,255,255,0.15)"),
 
   // Control-pad colors. Same hue across themes (matches the original sim).
   positionVectorProperty: profileColor("positionVector", "#2575BA", "#2575BA"),

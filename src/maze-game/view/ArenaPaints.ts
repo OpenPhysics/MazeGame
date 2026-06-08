@@ -5,17 +5,26 @@
  * Colors come from MazeGameColors; geometry scales with view tile size.
  */
 
-import type { TReadOnlyProperty } from "scenerystack/axon";
+import { DerivedProperty, type TReadOnlyProperty } from "scenerystack/axon";
 import { Vector2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { Circle, Color, Node, Path, Pattern, RadialGradient, VoicingNode } from "scenerystack/scenery";
-import { StarShape } from "scenerystack/scenery-phet";
 import MazeGameColors, { TRANSPARENT_COLOR } from "../../MazeGameColors.js";
 import MazeGameLayoutConstants from "../MazeGameLayoutConstants.js";
 
 function toColor(paint: Color | string): Color {
   return paint instanceof Color ? paint : Color.toColor(paint);
 }
+
+const goalStarFillLightColorProperty = new DerivedProperty(
+  [MazeGameColors.goalStarFillColorProperty],
+  (color: Color | string): Color => toColor(color).brighterColor(MazeGameLayoutConstants.ARENA_GOAL_STAR_FACET_BRIGHTEN_FACTOR),
+);
+
+const goalStarFillDarkColorProperty = new DerivedProperty(
+  [MazeGameColors.goalStarFillColorProperty],
+  (color: Color | string): Color => toColor(color).darkerColor(MazeGameLayoutConstants.ARENA_GOAL_STAR_FACET_DARKEN_FACTOR),
+);
 
 /**
  * Repeatable brick-wall pattern for wall tiles.
@@ -145,60 +154,132 @@ export function createParticleVisual(radiusView: number): ParticleVisualNodes {
 }
 
 /**
- * Bullseye rings, diagonal stripes, and star marker on the finish tile.
+ * Bullseye rings and star marker on the finish tile.
  */
 export function createGoalOverlayNode(tileSizeView: number): Node {
   const size = tileSizeView;
+  if (size <= 0) {
+    return new Node({ pickable: false });
+  }
+
   const center = size / 2;
   const ringStroke = Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_RING_STROKE_RATIO);
+  const [outerRadiusRatio, middleRadiusRatio, innerRadiusRatio] =
+    MazeGameLayoutConstants.ARENA_GOAL_RING_RADIUS_RATIOS;
 
-  const rings = new Path(null, {
+  const glowRadius = Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_BACKDROP_GLOW_RADIUS_RATIO);
+  const backdropGlow = new Circle(glowRadius, {
+    fill: new RadialGradient(0, 0, 0, 0, 0, glowRadius)
+      .addColorStop(0, MazeGameColors.goalBackdropGlowColorProperty)
+      .addColorStop(0.5, MazeGameColors.goalBackdropGlowMidColorProperty)
+      .addColorStop(1, TRANSPARENT_COLOR),
+    center: new Vector2(center, center),
+    pickable: false,
+  });
+
+  const outerRadius = size * outerRadiusRatio;
+  const middleRadius = size * middleRadiusRatio;
+  const innerRadius = size * innerRadiusRatio;
+
+  const ringsGlowShape = new Shape();
+  ringsGlowShape.circle(center, center, outerRadius);
+  ringsGlowShape.circle(center, center, middleRadius);
+  ringsGlowShape.circle(center, center, innerRadius);
+
+  const ringsGlow = new Path(ringsGlowShape, {
+    stroke: MazeGameColors.goalMarkerColorProperty,
+    lineWidth: ringStroke * MazeGameLayoutConstants.ARENA_GOAL_RING_GLOW_STROKE_FACTOR,
+    opacity: MazeGameLayoutConstants.ARENA_GOAL_RING_GLOW_OPACITY,
+    pickable: false,
+  });
+
+  const solidRingsShape = new Shape();
+  solidRingsShape.circle(center, center, outerRadius);
+  solidRingsShape.circle(center, center, innerRadius);
+
+  const solidRings = new Path(solidRingsShape, {
     stroke: MazeGameColors.goalMarkerColorProperty,
     lineWidth: ringStroke,
     pickable: false,
   });
-  const ringShape = new Shape();
-  for (const radiusRatio of MazeGameLayoutConstants.ARENA_GOAL_RING_RADIUS_RATIOS) {
-    ringShape.circle(center, center, size * radiusRatio);
-  }
-  rings.shape = ringShape;
 
+  const dashedRingShape = new Shape();
+  dashedRingShape.circle(center, center, middleRadius);
+
+  const dashedRing = new Path(dashedRingShape, {
+    stroke: MazeGameColors.goalMarkerColorProperty,
+    lineWidth: ringStroke,
+    lineDash: [size * MazeGameLayoutConstants.ARENA_GOAL_DASHED_RING_DASH_RATIO, size * MazeGameLayoutConstants.ARENA_GOAL_DASHED_RING_DASH_RATIO],
+    pickable: false,
+  });
+
+  // 4. Faceted 3D Star:
+  // Alternate wedges in lighter and darker shades of the theme star-fill color
   const starRadius = size * MazeGameLayoutConstants.ARENA_GOAL_STAR_RADIUS_RATIO;
-  const star = new Path(
-    new StarShape({
-      outerRadius: starRadius,
-      innerRadius: starRadius * MazeGameLayoutConstants.ARENA_GOAL_STAR_INNER_RADIUS_RATIO,
-    }),
-    {
-      fill: MazeGameColors.goalStarFillColorProperty,
-      stroke: MazeGameColors.goalMarkerColorProperty,
-      lineWidth: Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_STAR_STROKE_RATIO),
-      pickable: false,
-    },
-  );
-  star.center = new Vector2(center, center);
+  const starInnerRadius = starRadius * MazeGameLayoutConstants.ARENA_GOAL_STAR_INNER_RADIUS_RATIO;
 
-  const stripeWidth = Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_STRIPE_WIDTH_RATIO);
-  const [stripeStartX1, stripeStartX2] = MazeGameLayoutConstants.ARENA_GOAL_STRIPE_START_X_RATIOS;
-  const [stripeEndX1, stripeEndX2] = MazeGameLayoutConstants.ARENA_GOAL_STRIPE_END_X_RATIOS;
-  const stripes = new Path(
-    new Shape()
-      .moveTo(0, size)
-      .lineTo(size, 0)
-      .moveTo(size * stripeStartX1, size)
-      .lineTo(size * stripeEndX1, 0)
-      .moveTo(size * stripeStartX2, size)
-      .lineTo(size * stripeEndX2, 0),
-    {
-      stroke: MazeGameColors.goalStripeColorProperty,
-      lineWidth: stripeWidth,
-      lineCap: "round",
-      pickable: false,
-    },
+  const starNode = new Node({ pickable: false });
+  const starStrokeWidth = Math.max(1, size * MazeGameLayoutConstants.ARENA_GOAL_STAR_STROKE_RATIO);
+
+  for (let i = 0; i < 10; i++) {
+    const fillProperty = i % 2 === 0 ? goalStarFillLightColorProperty : goalStarFillDarkColorProperty;
+    const angle1 = (i * Math.PI) / 5 - Math.PI / 2;
+    const angle2 = ((i + 1) * Math.PI) / 5 - Math.PI / 2;
+    const r1 = i % 2 === 0 ? starRadius : starInnerRadius;
+    const r2 = i % 2 === 0 ? starInnerRadius : starRadius;
+
+    const p0 = new Vector2(center, center);
+    const p1 = new Vector2(center + r1 * Math.cos(angle1), center + r1 * Math.sin(angle1));
+    const p2 = new Vector2(center + r2 * Math.cos(angle2), center + r2 * Math.sin(angle2));
+
+    const wedgeShape = new Shape().moveToPoint(p0).lineToPoint(p1).lineToPoint(p2).close();
+    starNode.addChild(
+      new Path(wedgeShape, {
+        fill: fillProperty,
+        stroke: fillProperty,
+        lineWidth: 0.5,
+        pickable: false,
+      }),
+    );
+  }
+
+  // Draw the star outline on top to give a clean, crisp boundary
+  const outlineShape = new Shape();
+  for (let i = 0; i < 10; i++) {
+    const angle = (i * Math.PI) / 5 - Math.PI / 2;
+    const r = i % 2 === 0 ? starRadius : starInnerRadius;
+    const x = center + r * Math.cos(angle);
+    const y = center + r * Math.sin(angle);
+    if (i === 0) {
+      outlineShape.moveTo(x, y);
+    } else {
+      outlineShape.lineTo(x, y);
+    }
+  }
+  outlineShape.close();
+
+  const outline = new Path(outlineShape, {
+    stroke: MazeGameColors.goalMarkerColorProperty,
+    lineWidth: starStrokeWidth,
+    pickable: false,
+  });
+  starNode.addChild(outline);
+
+  const specularRadius = Math.max(1, starInnerRadius * MazeGameLayoutConstants.ARENA_GOAL_STAR_SPECULAR_RADIUS_RATIO);
+  const specularOffset = new Vector2(
+    center - specularRadius * MazeGameLayoutConstants.ARENA_GOAL_STAR_SPECULAR_OFFSET_RATIO,
+    center - specularRadius * MazeGameLayoutConstants.ARENA_GOAL_STAR_SPECULAR_OFFSET_RATIO,
   );
+  const starSpecularHighlight = new Circle(specularRadius, {
+    fill: new RadialGradient(0, 0, 0, 0, 0, specularRadius)
+      .addColorStop(0, MazeGameColors.particleSpecularColorProperty)
+      .addColorStop(1, TRANSPARENT_COLOR),
+    center: specularOffset,
+    pickable: false,
+  });
 
   return new Node({
-    children: [stripes, rings, star],
+    children: [backdropGlow, ringsGlow, solidRings, dashedRing, starNode, starSpecularHighlight],
     pickable: false,
   });
 }

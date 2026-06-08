@@ -78,10 +78,13 @@ export default class ArenaNode extends Node {
   private readonly derivedProperties: Array<{ dispose(): void }> = [];
 
   private readonly rebuildLevel = (level: Level): void => {
-    const { wallsLayer, startTile, finishTile, finishSheen, finishOverlay } = this.levelLayoutRefs;
+    const { wallsLayer, startTile, finishShadow, finishTile, finishSheen, finishOverlay } = this.levelLayoutRefs;
     const modelViewTransform = this.levelLayoutRefs.modelViewTransform;
-    wallsLayer.removeAllChildren();
     const tileSize = this.tileSizeView;
+    if (tileSize <= 0) {
+      return;
+    }
+    wallsLayer.removeAllChildren();
     const wallFill = createWallFill(tileSize, MazeGameColors.wallColorProperty, MazeGameColors.wallShadowColorProperty);
     for (let r = 0; r < level.data.length; r++) {
       const row = level.data[r];
@@ -112,6 +115,8 @@ export default class ArenaNode extends Node {
     const finishGrid = level.finishPosition();
     const finishX = modelViewTransform.modelToViewX(level.colToX(finishGrid.col));
     const finishY = modelViewTransform.modelToViewY(level.rowToY(finishGrid.row));
+    const shadowOffset = Math.max(1, tileSize * 0.055);
+    finishShadow.setRect(finishX + shadowOffset, finishY + shadowOffset, tileSize, tileSize);
     finishTile.setRect(finishX, finishY, tileSize, tileSize);
     finishSheen.setRect(finishX, finishY, tileSize, tileSize);
     finishSheen.fill = new LinearGradient(0, 0, tileSize, tileSize)
@@ -289,6 +294,7 @@ export default class ArenaNode extends Node {
   private readonly levelLayoutRefs: {
     wallsLayer: Node;
     startTile: Rectangle;
+    finishShadow: Rectangle;
     finishTile: Rectangle;
     finishSheen: Rectangle;
     finishOverlay: Node;
@@ -315,6 +321,13 @@ export default class ArenaNode extends Node {
     });
     this.addChild(startTile);
 
+    const finishShadow = new Rectangle(0, 0, 0, 0, {
+      fill: MazeGameColors.goalTileShadowColorProperty,
+      cornerRadius: MazeGameLayoutConstants.ARENA_GOAL_CORNER_RADIUS,
+      pickable: false,
+    });
+    this.addChild(finishShadow);
+
     const finishTile = new Rectangle(0, 0, 0, 0, {
       fill: MazeGameColors.finishColorProperty,
       cornerRadius: MazeGameLayoutConstants.ARENA_GOAL_CORNER_RADIUS,
@@ -334,6 +347,7 @@ export default class ArenaNode extends Node {
     this.levelLayoutRefs = {
       wallsLayer,
       startTile,
+      finishShadow,
       finishTile,
       finishSheen: this.finishSheen,
       finishOverlay: this.finishOverlay,
@@ -564,7 +578,6 @@ export default class ArenaNode extends Node {
       },
     );
 
-    model.levelProperty.link(this.rebuildLevel, { disposer: this });
     this.wallColorMultilink = Multilink.multilink(
       [MazeGameColors.wallColorProperty, MazeGameColors.wallShadowColorProperty],
       (): void => {
@@ -572,6 +585,7 @@ export default class ArenaNode extends Node {
       },
     );
     this.setLayout(modelViewTransform, viewBounds);
+    model.levelProperty.link(this.rebuildLevel, { disposer: this });
   }
 
   /**
