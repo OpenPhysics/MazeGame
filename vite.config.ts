@@ -1,6 +1,13 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+/**
+ * Security headers required for:
+ *  - COOP/COEP: SharedArrayBuffer support
+ *  - CSP: restrict resource loading to same-origin + known blob/data exceptions
+ *  - X-Content-Type-Options: prevent MIME sniffing
+ *  - X-Frame-Options: allow same-origin framing for a11y-view.html iframe embedding
+ */
 const securityHeaders: Record<string, string> = {
   "Cross-Origin-Opener-Policy": "same-origin",
   "Cross-Origin-Embedder-Policy": "require-corp",
@@ -9,9 +16,12 @@ const securityHeaders: Record<string, string> = {
     // 'unsafe-eval' is required for SceneryStack query parameter parsing
     "script-src 'self' 'unsafe-eval'",
     "worker-src blob: 'self'",
+    // Inline styles are set via element.style / cssText throughout the UI layer
     "style-src 'self' 'unsafe-inline'",
+    // data: for icons
     "img-src 'self' data:",
     "media-src 'self' blob:",
+    // blob: for fetch inside workers
     "connect-src 'self' blob:",
     "font-src 'self'",
     "object-src 'none'",
@@ -23,9 +33,12 @@ const securityHeaders: Record<string, string> = {
   "X-Frame-Options": "SAMEORIGIN",
 };
 
+// https://vite.dev/config/
 export default defineConfig({
+  // So the build can be served from an arbitrary path
   base: "./",
   build: {
+    // Requires Vite 8+ / esbuild ≥0.24. Run `npm ci` if build errors on ES2024.
     target: "es2024",
   },
   server: {

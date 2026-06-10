@@ -3,8 +3,23 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "A SceneryStack port of the PhET Maze Game simulation.",
+  "description": "SceneryStack port of the PhET 'Maze Game' simulation. Drive a particle through tile-based mazes using position, velocity, or acceleration control modes.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenPhysics/MazeGame.git"
+  },
+  "keywords": [
+    "maze-game",
+    "simulation",
+    "SceneryStack",
+    "interactive",
+    "physics",
+    "kinematics",
+    "vectors",
+    "education",
+    "pwa"
+  ],
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -33,9 +48,9 @@
     "sharp": "^0.34.5",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
-    "vite": "^8.0.14",
+    "vite": "^8.0.16",
     "vite-plugin-pwa": "^1.3.0",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.8"
   },
   "engines": {
     "node": ">=22.0.0"
