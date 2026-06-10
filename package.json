@@ -33,7 +33,8 @@
     "test:query-params": "node scripts/check-query-params.mjs",
     "icons": "tsx scripts/generate-icons.ts",
     "clean": "rm -rf dist",
-    "postinstall": "node scripts/ensure-rolldown-binding.mjs"
+    "postinstall": "node scripts/ensure-rolldown-binding.mjs",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "scenerystack": "^3.0.0"
