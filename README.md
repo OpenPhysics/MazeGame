@@ -71,3 +71,21 @@ for details.
 GitHub Actions runs lint, type-check, tests, and build on push/PR to `main`. Production deploy
 to GitHub Pages is configured in `.github/workflows/deploy.yml`.
 
+## Tech Stack
+
+| Tool | Version | Purpose |
+|---|---|---|
+| [SceneryStack](https://scenerystack.org/) | ^3.0.0 | Simulation framework |
+| [Vite](https://vitejs.dev/) | ^8 | Build tool + dev server |
+| [TypeScript](https://www.typescriptlang.org/) | ^6 | Type-safe JavaScript |
+| [Biome](https://biomejs.dev/) | ^2.4 | Linting + formatting |
+| [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) | ^1 | PWA + service worker |
+
+## License
+
+MIT. The original PhET simulation is Copyright © University of Colorado; this is an independent reimplementation.
+
+## Contributing
+
+See [OpenPhysics contributing guidelines](https://github.com/OpenPhysics/.github/blob/main/CONTRIBUTING.md).
+Report bugs via GitHub Issues; use org issue templates.
