@@ -18,6 +18,7 @@ import "./brand.js";
 import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
 import { StringManager } from "./i18n/StringManager.js";
+import MazeGameColors from "./MazeGameColors.js";
 import { MazeGameScreen } from "./maze-game/MazeGameScreen.js";
 import { createParticleTracePreference } from "./maze-game/preferences/createParticleTracePreference.js";
 
@@ -28,6 +29,7 @@ onReadyToLaunch(() => {
     new MazeGameScreen({
       name: stringManager.getScreenNames().mazeGameStringProperty,
       tandem: Tandem.ROOT.createTandem("mazeGameScreen"),
+      backgroundColorProperty: MazeGameColors.backgroundColorProperty,
     }),
   ];
 

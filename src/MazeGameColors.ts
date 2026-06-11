@@ -101,6 +101,4 @@ const MazeGameColors = {
   toggleSwitchTrackFillRightProperty: profileColor("toggleSwitchTrackFillRight", "#64bd5a", "#64bd5a"),
 };
 
-MazeGameNamespace.register("MazeGameColors", MazeGameColors);
-
 export default MazeGameColors;
