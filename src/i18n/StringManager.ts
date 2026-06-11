@@ -9,9 +9,11 @@ import type { ReadOnlyProperty, TReadOnlyProperty } from "scenerystack/axon";
 import { LocalizedString } from "scenerystack/chipper";
 import MazeGameNamespace from "../MazeGameNamespace.js";
 import stringsEn from "./strings_en.json";
+import stringsEs from "./strings_es.json";
 import stringsFr from "./strings_fr.json";
 
-// Compile-time key-parity check between locale files.
+// ── Compile-time key-parity check ─────────────────────────────────────────────
+// satisfies errors immediately if either locale file is missing keys from the other.
 // biome-ignore lint/complexity/noVoid: intentional compile-time type assertion
 void (stringsEn satisfies typeof stringsFr);
 // biome-ignore lint/complexity/noVoid: intentional compile-time type assertion
@@ -20,6 +22,7 @@ void (stringsFr satisfies typeof stringsEn);
 const stringProperties = LocalizedString.getNestedStringProperties({
   en: stringsEn,
   fr: stringsFr,
+  es: stringsEs,
 });
 
 export type ControlModeStrings = {

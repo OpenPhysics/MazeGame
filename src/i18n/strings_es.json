@@ -1,0 +1,80 @@
+{
+  "title": "Juego del Laberinto",
+  "screens": {
+    "mazeGame": "Juego del Laberinto"
+  },
+  "controlMode": {
+    "title": "Control",
+    "position": "Posición",
+    "velocity": "Velocidad",
+    "acceleration": "Aceleración",
+    "positionShort": "Pos",
+    "velocityShort": "Vel",
+    "accelerationShort": "Acel"
+  },
+  "levels": {
+    "title": "Nivel",
+    "practice": "Práctica",
+    "level1": "Nivel 1",
+    "level2": "Nivel 2",
+    "certainDeath": "Muerte segura"
+  },
+  "hud": {
+    "collisionMultiplier": "×",
+    "won": "¡Meta!",
+    "resetLevel": "Reiniciar nivel",
+    "collisionWarning": "¡Colisión!",
+    "nextLevel": "Siguiente nivel",
+    "resetAll": "Reiniciar todo"
+  },
+  "preferences": {
+    "particleTrace": "Rastro de la partícula",
+    "particleTraceDescription": "Mostrar el camino recorrido por la partícula."
+  },
+  "info": {
+    "title": "Información del juego",
+    "introduction": "Conduce la partícula roja hasta la casilla de meta. Elige Posición, Velocidad o Aceleración y usa el panel de control o las teclas de flecha / WASD. Llega a la meta con <b>cero colisiones con las paredes</b> para ganar.",
+    "practiceDescription": "<b>Práctica:</b> Arena abierta sin paredes. Aprende los controles.",
+    "level1Description": "<b>Nivel 1:</b> Un laberinto sencillo con algunas paredes.",
+    "level2Description": "<b>Nivel 2:</b> Un laberinto sinuoso delimitado por paredes exteriores.",
+    "certainDeathDescription": "<b>Muerte segura:</b> Un laberinto desafiante. ¡Buena suerte!"
+  },
+  "keyboardHelp": {
+    "particle": "Partícula",
+    "controlParticle": "Controlar la partícula",
+    "controlParticleDescription": "Teclas de flecha o W, A, S, D. En modo Posición, mueve la partícula. En modo Velocidad, establece la velocidad. En modo Aceleración, establece la aceleración.",
+    "stopMotion": "Detener el movimiento",
+    "stopMotionDescription": "En modo Velocidad o Aceleración, establece la velocidad o la aceleración en cero."
+  },
+  "a11y": {
+    "controlPad": "Panel de control",
+    "controlPadHelpPosition": "Arrastra el mando o usa las teclas de flecha para establecer la posición de la partícula.",
+    "controlPadHelpVelocity": "Arrastra el mando o usa las teclas de flecha para establecer la velocidad. Presiona Espacio para detener.",
+    "controlPadHelpAcceleration": "Arrastra el mando o usa las teclas de flecha para establecer la aceleración. Presiona Espacio para detener.",
+    "particle": "Partícula",
+    "particleHelpPosition": "Modo Posición. Usa el panel de control o las teclas de flecha para mover la partícula.",
+    "particleHelpVelocity": "Modo Velocidad. Usa el panel de control o las teclas de flecha para establecer la velocidad.",
+    "particleHelpAcceleration": "Modo Aceleración. Usa el panel de control o las teclas de flecha para establecer la aceleración.",
+    "timeDisplayPattern": "Tiempo transcurrido, {{value}}",
+    "collisionsDisplayPattern": "Colisiones con paredes, {{value}}",
+    "hudPanel": "Estado del juego y controles de nivel",
+    "levelComplete": "Meta alcanzada con cero colisiones",
+    "collisionAlert": "Colisión con la pared",
+    "levelCompleteAlert": "Meta alcanzada con cero colisiones",
+    "levelChangedPattern": "Jugando ahora {{level}}",
+    "controlModeChangedPattern": "Modo de control, {{mode}}",
+    "levelSelectorHelp": "Elige un nivel del laberinto. Reinicia el juego actual.",
+    "positionModeHelp": "Establece la posición de la partícula directamente.",
+    "velocityModeHelp": "Establece la velocidad de la partícula. Presiona Espacio para detener el movimiento.",
+    "accelerationModeHelp": "Establece la aceleración de la partícula. Presiona Espacio para detener el movimiento.",
+    "screenSummary": {
+      "playArea": "Conduce la partícula roja por el laberinto hasta la casilla de meta. Llega a la meta con cero colisiones con las paredes para ganar.",
+      "controlArea": "Elige Posición, Velocidad o Aceleración. Usa el panel de control o las teclas de flecha. Elige un nivel y controla el tiempo transcurrido y las colisiones.",
+      "interactionHint": "Las teclas de flecha o W, A, S, D controlan la partícula. Espacio detiene el movimiento en modo Velocidad o Aceleración.",
+      "currentLevelPattern": "Nivel actual, {{level}}",
+      "currentModePattern": "Modo de control, {{mode}}",
+      "collisionCountPattern": "Colisiones con paredes, {{value}}",
+      "wonStatus": "Nivel completado"
+    }
+  }
+}
