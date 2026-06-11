@@ -1,4 +1,4 @@
-# Maze Game — Implementation Notes
+# Implementation Notes - Maze Game Simulation
 
 SceneryStack port of [PhET Maze Game](https://phet.colorado.edu/en/simulations/maze-game). Brand: `made-with-scenerystack`. Build: Vite 8 + TypeScript 6.
 
