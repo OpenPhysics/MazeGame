@@ -7,7 +7,7 @@
 
 import { KeyboardHelpSection, KeyboardHelpSectionRow } from "scenerystack/scenery-phet";
 import type { KeyboardHelpStrings } from "../../i18n/StringManager.js";
-import MazeGameHotkeyData from "./MazeGameHotkeyData.js";
+import MazeGameHotkeyData from "../keyboard/MazeGameHotkeyData.js";
 
 export default class MazeGameKeyboardHelpSection extends KeyboardHelpSection {
   public constructor(strings: KeyboardHelpStrings) {

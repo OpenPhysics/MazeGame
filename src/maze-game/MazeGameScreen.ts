@@ -9,8 +9,8 @@ import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
 import type { Tandem } from "scenerystack/tandem";
 import MazeGameColors from "../MazeGameColors.js";
-import MazeGameKeyboardHelpContent from "./keyboard/MazeGameKeyboardHelpContent.js";
 import { MazeGameModel } from "./model/MazeGameModel.js";
+import MazeGameKeyboardHelpContent from "./view/MazeGameKeyboardHelpContent.js";
 import { MazeGameScreenView } from "./view/MazeGameScreenView.js";
 
 type MazeGameScreenOptions = ScreenOptions & { tandem: Tandem };
