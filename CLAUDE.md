@@ -23,7 +23,10 @@ SceneryStack port of the PhET Maze Game. Drive a particle through tile mazes in 
 
 - Layout → `MazeGameLayoutConstants.ts` and `this.layoutBounds`
 - Physics and panel chrome → `MazeGameConstants.ts`
-- A11y strings → `StringManager` / locale JSON, not hardcoded
+- A11y strings → `StringManager.getA11yStrings()` / locale JSON, not hardcoded. This sim is a
+  reference for the shared [OpenPhysics accessibility convention](https://github.com/OpenPhysics/OpenPhysics/blob/main/ACCESSIBILITY.md):
+  `MazeGameScreenSummaryContent` (structured regions + live current-details) registered via
+  `setScreenSummaryContent`, PDOM order via `pdomPlayAreaNode`/`pdomControlAreaNode`.
 
 ## Documentation
 
