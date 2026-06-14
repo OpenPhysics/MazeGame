@@ -191,6 +191,7 @@ export class MazeGameScreenView extends ScreenView {
         this.infoDialog.show();
       },
       scale: MazeGameLayoutConstants.INFO_BUTTON_SCALE,
+      accessibleName: StringManager.getInstance().getInfoStrings().titleStringProperty,
       tandem: options.tandem.createTandem("infoButton"),
     });
 
