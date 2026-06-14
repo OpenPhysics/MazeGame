@@ -7,7 +7,9 @@
 
 import { BooleanProperty } from "scenerystack/axon";
 import MazeGameNamespace from "../MazeGameNamespace.js";
+import mazeGameQueryParameters from "./mazeGameQueryParameters.js";
 
-export const particleTraceEnabledProperty = new BooleanProperty(false);
+// Initial value comes from the `particleTrace` query parameter.
+export const particleTraceEnabledProperty = new BooleanProperty(mazeGameQueryParameters.particleTrace);
 
 MazeGameNamespace.register("particleTraceEnabledProperty", particleTraceEnabledProperty);
