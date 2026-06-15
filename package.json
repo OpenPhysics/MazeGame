@@ -43,7 +43,7 @@
     "@biomejs/biome": "^2.5.0",
     "@rolldown/binding-linux-x64-gnu": "^1.1.0",
     "@types/node": "^24.0.0",
-    "happy-dom": "^20.10.2",
+    "happy-dom": "^20.10.3",
     "playwright": "^1.52.0",
     "png-to-ico": "^3.0.1",
     "sharp": "^0.35.1",
@@ -51,7 +51,7 @@
     "typescript": "^6.0.3",
     "vite": "^8.0.16",
     "vite-plugin-pwa": "^1.3.0",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": ">=22.0.0"
