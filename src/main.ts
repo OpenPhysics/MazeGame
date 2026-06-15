@@ -20,7 +20,7 @@ import { Tandem } from "scenerystack/tandem";
 import { StringManager } from "./i18n/StringManager.js";
 import MazeGameColors from "./MazeGameColors.js";
 import { MazeGameScreen } from "./maze-game/MazeGameScreen.js";
-import { createParticleTracePreference } from "./maze-game/preferences/createParticleTracePreference.js";
+import { MazeGamePreferencesNode } from "./preferences/MazeGamePreferencesNode.js";
 
 onReadyToLaunch(() => {
   const stringManager = StringManager.getInstance();
@@ -38,7 +38,7 @@ onReadyToLaunch(() => {
       visualOptions: {
         supportsProjectorMode: true,
         supportsInteractiveHighlights: true,
-        customPreferences: [{ createContent: createParticleTracePreference }],
+        customPreferences: [{ createContent: (tandem) => new MazeGamePreferencesNode(tandem) }],
       },
       audioOptions: {
         supportsSound: true,

@@ -11,12 +11,13 @@ SceneryStack port of the PhET Maze Game. Drive a particle through tile mazes in 
 | Area | Files |
 |---|---|
 | Bootstrap | `MazeGameColors.ts`, `MazeGameNamespace.ts` |
-| Screen | `src/maze-game/MazeGameScreen.ts`, `MazeGameLayoutConstants.ts`, `MazeGamePreferences.ts` |
+| Screen | `src/maze-game/MazeGameScreen.ts`, `MazeGameLayoutConstants.ts` |
+| Preferences | `src/preferences/MazeGamePreferencesModel.ts`, `MazeGamePreferencesNode.ts`, `mazeGameQueryParameters.ts` |
 | Model | `MazeGameModel.ts`, `Level.ts`, `Levels.ts`, `Particle.ts`, `MazeGameConstants.ts`, `ControlMode.ts`, `TileType.ts` |
 | View | `MazeGameScreenView.ts`, `ArenaNode.ts`, `ControlPanel.ts`, `LevelSelector.ts`, `HudNode.ts` |
 | A11y | `src/maze-game/a11y/MazeGameDescriber.ts`, `createA11yDerivedProperties.ts` |
 | Keyboard | `applyMazeGameKeyboardInput.ts`, `MazeGameKeyboardHelpContent.ts` |
-| Sound | `createSonificationProperties.ts`, `createParticleTracePreference.ts` |
+| Sound | `createSonificationProperties.ts` |
 | Dev tools | `public/a11y-view.html` — PDOM mirror + alert log (development only) |
 
 ## Conventions (this sim)
