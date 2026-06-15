@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import Level from "./Level.js";
-import MazeGameConstants from "./MazeGameConstants.js";
-import { TileType } from "./TileType.js";
+import Level from "../../../src/maze-game/model/Level.js";
+import MazeGameConstants from "../../../src/maze-game/model/MazeGameConstants.js";
+import { TileType } from "../../../src/maze-game/model/TileType.js";
 
 const charToTile = {
   " ": TileType.FLOOR,

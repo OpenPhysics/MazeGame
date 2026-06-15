@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { ControlMode } from "./ControlMode.js";
-import { LevelKey } from "./Levels.js";
-import MazeGameConstants from "./MazeGameConstants.js";
-import { MazeGameModel } from "./MazeGameModel.js";
+import { ControlMode } from "../../../src/maze-game/model/ControlMode.js";
+import { LevelKey } from "../../../src/maze-game/model/Levels.js";
+import MazeGameConstants from "../../../src/maze-game/model/MazeGameConstants.js";
+import { MazeGameModel } from "../../../src/maze-game/model/MazeGameModel.js";
 
 const FIXED_DT = MazeGameConstants.FIXED_DT;
 
