@@ -4,7 +4,7 @@ import { LevelKey } from "../../../src/maze-game/model/Levels.js";
 import MazeGameConstants from "../../../src/maze-game/model/MazeGameConstants.js";
 import { MazeGameModel } from "../../../src/maze-game/model/MazeGameModel.js";
 
-const FIXED_DT = MazeGameConstants.FIXED_DT;
+const FIXED_DT: number = MazeGameConstants.FIXED_DT;
 
 /** Level 1 has a vertical wall strip starting at column 7, row 3. */
 const LEVEL1_WALL_COL = 7;

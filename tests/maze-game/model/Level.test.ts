@@ -3,12 +3,12 @@ import Level from "../../../src/maze-game/model/Level.js";
 import MazeGameConstants from "../../../src/maze-game/model/MazeGameConstants.js";
 import { TileType } from "../../../src/maze-game/model/TileType.js";
 
-const charToTile = {
+const charToTile: Record<string, TileType> = {
   " ": TileType.FLOOR,
   W: TileType.WALL,
   S: TileType.START,
   F: TileType.FINISH,
-} as const satisfies Record<string, TileType>;
+};
 
 const WALL_COL = 10;
 
