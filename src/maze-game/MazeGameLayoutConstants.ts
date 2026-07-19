@@ -2,7 +2,7 @@
  * MazeGameLayoutConstants.ts
  *
  * View layout, typography, and shared chrome dimensions (screen margins, arrows, fonts).
- * Physics and simulation values remain in model/MazeGameConstants.ts.
+ * Physics and simulation values remain in ../MazeGameConstants.ts.
  */
 
 const MazeGameLayoutConstants = {
