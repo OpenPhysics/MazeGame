@@ -4,53 +4,54 @@ Sim-specific context for AI assistants. General SceneryStack guidance: [OpenPhys
 
 ## Project
 
-SceneryStack port of the PhET Maze Game. Drive a particle through tile mazes in Position, Velocity, or Acceleration control modes.
+SceneryStack port of the PhET *Maze Game*. Single screen: drive a particle through tile mazes in **Position**, **Velocity**, or **Acceleration** control modes across four fixed levels.
+
+Physics for educators: `doc/model.md`. Architecture: `doc/implementation-notes.md`.
 
 ## Key files
 
-| Area | Files |
+| Area | Location |
 |---|---|
-| Bootstrap | `MazeGameColors.ts`, `MazeGameNamespace.ts` |
 | Screen | `src/maze-game/MazeGameScreen.ts`, `MazeGameLayoutConstants.ts` |
-| Preferences | `src/preferences/MazeGamePreferencesModel.ts`, `MazeGamePreferencesNode.ts`, `mazeGameQueryParameters.ts` |
-| Model | `MazeGameModel.ts`, `Level.ts`, `Levels.ts`, `Particle.ts`, `MazeGameConstants.ts`, `ControlMode.ts`, `TileType.ts` |
-| View | `MazeGameScreenView.ts`, `ArenaNode.ts`, `ControlPanel.ts`, `LevelSelector.ts`, `HudNode.ts` |
-| A11y | `src/maze-game/a11y/MazeGameDescriber.ts`, `createA11yDerivedProperties.ts` |
+| Model | `model/MazeGameModel.ts`, `Level.ts`, `Levels.ts`, `Particle.ts`, `MazeGameConstants.ts`, `ControlMode.ts`, `TileType.ts` |
+| View | `view/MazeGameScreenView.ts`, `ArenaNode.ts`, `ControlPanel.ts`, `LevelSelector.ts`, `HudNode.ts`, `MazeGameScreenSummaryContent.ts` |
+| A11y | `a11y/MazeGameDescriber.ts`, `a11y/createA11yDerivedProperties.ts` |
 | Keyboard | `applyMazeGameKeyboardInput.ts`, `MazeGameKeyboardHelpContent.ts` |
 | Sound | `createSonificationProperties.ts` |
-| Dev tools | `public/a11y-view.html` — PDOM mirror + alert log (development only) |
+| Preferences / query | `src/preferences/MazeGamePreferencesModel.ts`, `mazeGameQueryParameters.ts` |
+| Colors / strings | `MazeGameColors.ts`, `MazeGameNamespace.ts`, `src/i18n/StringManager.ts` |
 
-## Conventions (this sim)
+## Model
 
-- Layout → `MazeGameLayoutConstants.ts` and `this.layoutBounds`
-- Physics and panel chrome → `MazeGameConstants.ts`
-- **Documented deviation (CONVENTIONS.md §2):** constants are nested, not at `src/` root —
-  `src/maze-game/model/MazeGameConstants.ts` (physics) and
-  `src/maze-game/MazeGameLayoutConstants.ts` (layout) live next to their consumers; there is
-  deliberately no root `MazeGameConstants.ts`.
-- A11y strings → `StringManager.getA11yStrings()` / locale JSON, not hardcoded. This sim is a
-  reference for the shared [OpenPhysics accessibility convention](https://github.com/OpenPhysics/Baton/blob/main/ACCESSIBILITY.md):
-  `MazeGameScreenSummaryContent` (structured regions + live current-details) registered via
-  `setScreenSummaryContent`, PDOM order via `pdomPlayAreaNode`/`pdomControlAreaNode`.
+`MazeGameModel implements TModel`. Owns the particle, current `Level`, active `ControlMode`, elapsed timer, collision counter, and win flag.
 
-## Documentation
+| Property | Type | Meaning |
+|---|---|---|
+| `particle.{x,y,vx,vy,ax,ay}Property` | `NumberProperty` | kinematics (via `Particle`) |
+| `levelProperty` | derived `ReadOnlyProperty<Level>` | current maze grid |
+| `controlModeProperty` | `ReadOnlyProperty<ControlMode>` | Position / Velocity / Acceleration |
+| `timeProperty` | `ReadOnlyProperty<number>` | elapsed since leaving start tile |
+| `collisionsProperty` | `ReadOnlyProperty<number>` | fresh wall contacts only |
+| `wonProperty` | `ReadOnlyProperty<boolean>` | reached goal tile |
+| `gameGenerationProperty` | `ReadOnlyProperty<number>` | bumps on reset/level change |
 
-| File | Contents |
-|---|---|
-| `doc/model.md` | Pedagogical model |
-| `doc/implementation-notes.md` | Architecture, a11y, testing |
-| `doc/query-parameter-testing.md` | CRC query params and smoke-test recipes |
+### Stepping & numerics
 
-## Sim-specific commands
+- **Fixed timestep accumulator** (`FIXED_DT`, `MAX_CATCHUP_STEPS`) integrates motion each slice; mode change clears incompatible kinematic state (e.g. zero velocity when switching to Position).
+- Wall collisions zero velocity and acceleration; collision counter increments only on false→true contact transitions, not sustained overlap.
+- Timer starts when the particle leaves the start tile center (cached at level load).
 
-```bash
-npm test                   # Vitest (model collision & game logic)
-npm run test:query-params  # Headless Playwright query-param smoke tests
-```
+## Accessibility
+
+Follows the shared [OpenPhysics accessibility convention](https://github.com/OpenPhysics/Baton/blob/main/ACCESSIBILITY.md).
+`MazeGameScreenView` registers `MazeGameScreenSummaryContent` (structured regions + live
+current-details) via `setScreenSummaryContent`, and orders the PDOM via
+`pdomPlayAreaNode`/`pdomControlAreaNode`. A11y strings live under the top-level `a11y` key in
+each locale JSON, via `StringManager.getA11yStrings()`.
 
 ## Compliance carve-outs
 
-- **Nested constants:** `src/maze-game/model/MazeGameConstants.ts` — level/physics constants co-located with the maze model.
+- **Nested constants:** `src/maze-game/model/MazeGameConstants.ts` (physics) and `src/maze-game/MazeGameLayoutConstants.ts` (layout) — co-located with consumers; no root `MazeGameConstants.ts`.
 
 ## Testing
 
@@ -58,11 +59,29 @@ Fleet-standard Vitest layout:
 
 | Path | Purpose |
 |---|---|
-| `vitest.config.ts` | Test environment + `setupFiles` when present; `execArgv: ["--expose-gc"]` with memory-leak suite |
-| `tests/setup.ts` | Canvas / AudioContext mocks + `init({ name: "…" })` before SceneryStack imports (when required) |
+| `vitest.config.ts` | `happy-dom` environment, `setupFiles`, `execArgv: ["--expose-gc"]` |
+| `tests/setup.ts` | Canvas / AudioContext mocks + `init({ name: "…" })` before SceneryStack imports |
 | `tests/**/*.test.ts` | Model/physics unit tests — mirror `src/` under `tests/` |
 | `tests/memory-leak.test.ts` | WeakRef + `forceGC` dispose regression (fleet pattern) |
 
-- Put unit tests only under root `tests/` (never co-locate or use `__tests__/`).
-- Run `npm test`. CI runs the suite when a `test` script is present.
-- Expand `memory-leak.test.ts` for components that add/remove nodes or link Properties at runtime (see OpticsLab).
+Actual specs:
+
+- `tests/maze-game/model/Level.test.ts`
+- `tests/maze-game/model/MazeGameModel.test.ts`
+- `tests/memory-leak.test.ts`
+
+Vitest environment: `happy-dom`. See also `doc/query-parameter-testing.md` for CRC query-param recipes.
+
+Run `npm test`. CI runs the suite when a `test` script is present.
+
+## Commands
+
+```bash
+npm run lint && npm run check && npm run build
+npm test
+npm run test:query-params   # headless Playwright query-param smoke tests
+```
+
+## Development notes
+
+- `public/a11y-view.html` is a development-only PDOM mirror + alert log.

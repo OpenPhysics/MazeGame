@@ -1,52 +1,101 @@
-# Maze Game — Model Description
+# Model - Maze Game
+
+This document describes the model (the underlying physics, math, and behavior) for the simulation,
+in terms appropriate for an educator. It is the companion to
+[implementation-notes.md](./implementation-notes.md), which targets developers.
 
 ## Overview
 
-Maze Game is a kinematics exploration where students drive a particle through a tile-based maze. The learning goal is to connect **position**, **velocity**, and **acceleration** as different ways to control motion, and to see how collisions affect the ability to reach the goal.
+Maze Game is a **kinematics puzzle** in which students drive a particle through **tile-based
+mazes** by controlling **position**, **velocity**, or **acceleration**. The learning goal is to
+connect the three descriptions of motion and to see how **collisions** — resetting velocity (and
+acceleration) at walls — affect whether a carefully planned path can reach the goal.
 
-## The Particle
+Four levels increase wall density and path complexity, from an open **Practice** layout to
+**Certain Death** narrow passages.
 
-The player controls a circular particle on a 32 × 14 tile grid (each tile is 1 meter). The particle has:
+Key ideas a student should take away:
 
-- **Position** — where it is on the maze (meters, origin at grid center)
-- **Velocity** — speed and direction (m/s), used in Velocity mode
-- **Acceleration** — rate of change of velocity (m/s²), used in Acceleration mode
+- The same destination may be easy in Position mode but require anticipating momentum in Velocity
+  or Acceleration mode.
+- A wall collision stops progress toward a "perfect" run: the finish counts as closed until reset.
+- Integration builds velocity and position from acceleration over time; constant acceleration
+  produces parabolic paths until a wall intervenes.
 
-In **Position** mode, velocity and acceleration are not integrated; the user sets position directly. In **Velocity** mode, the sim integrates position from velocity each timestep. In **Acceleration** mode, the sim integrates velocity and position from acceleration.
+## Quantities and units
 
-## The Maze
+| Quantity | Symbol | Units | Notes |
+|---|---|---|---|
+| Position | **r** = (x, y) | m | Origin at grid center; 32 × 14 tiles × 1 m |
+| Velocity | **v** | m/s | Set in Velocity mode (pad or keyboard) |
+| Acceleration | **a** | m/s² | Set in Acceleration mode |
+| Particle radius | — | m | 0.375 (collision geometry) |
+| Time | t | s | Starts when the particle leaves the start tile |
+| Collisions | — | count | Fresh wall contacts only (not sustained overlap) |
 
-Each level is an ASCII grid of tiles:
+## The maze
+
+Each level is a fixed ASCII grid:
 
 | Tile | Meaning |
-|------|---------|
-| Open floor | Particle can pass |
-| Wall | Particle collides; velocity/acceleration reset on contact |
-| Start | Initial spawn point |
+|---|---|
+| Open floor | Passable |
+| Wall | Collision — push-back and zero velocity |
+| Start | Initial spawn |
 | Finish | Goal tile |
 
-When the particle overlaps a wall in Velocity or Acceleration mode, the sim pushes it back to the last non-colliding point and zeros velocity (and acceleration in Acceleration mode). This prevents tunneling through walls.
+Grid size: **32 columns × 14 rows**, 1 m per tile → **32 m × 14 m** playable area.
 
-## Collisions and Winning
+## Governing equations
 
-- Each **new** wall contact increments the collision counter (staying in contact does not add more).
-- The player **wins** only when the particle touches the finish tile **with zero collisions** on that attempt.
-- After a collision, the finish tile appears “closed” until the level is reset.
+**Position mode** — the student sets **r** directly (drag, control pad, or arrow keys). Velocity
+and acceleration are not integrated; switching to this mode zeros **v** and **a**.
 
-## Timer
+**Velocity mode** — each step:
 
-The elapsed-time counter starts when the particle moves off the start tile, so setup time is not counted.
+```
+r ← r + v · Δt
+```
+
+**Acceleration mode** — each step (velocity then position, with constant-a over Δt):
+
+```
+v ← v + a · Δt
+r ← r + v · Δt + ½ a · Δt²
+```
+
+**Wall collision** (Velocity and Acceleration modes): if the particle overlaps a wall after
+integration, it is moved back (bisection to the last free point), **v** → 0, and **a** → 0 in
+Acceleration mode. Each new contact increments the collision counter; resting against a wall does
+not add repeat counts.
+
+## Winning and timing
+
+- **Win** — particle overlaps the finish tile with **zero collisions** on that attempt.
+- After any collision, the finish appears **closed** until the level is reset.
+- The timer runs only after the particle **leaves the start tile**, so setup time is excluded.
 
 ## Levels
 
-Four levels are provided, from Practice (open path) to Certain Death (narrow passages). Difficulty increases with wall density and path complexity.
+| Level | Character |
+|---|---|
+| Practice | Open path, no walls |
+| Level 1 | Simple wall maze |
+| Level 2 | Denser obstacles |
+| Certain Death | Narrow passages |
 
-## Control Modes (Pedagogy)
+## Simplifications and assumptions
 
-| Mode | Student action | Model behavior |
-|------|----------------|----------------|
-| Position | Drag particle or pad; arrow keys step position | Direct position set |
-| Velocity | Set velocity vector on pad; arrow keys set speed/direction | Position integrated from v |
-| Acceleration | Set acceleration vector; arrow keys set a | v and x integrated from a |
+- **Pure kinematics** — no forces, mass, or friction beyond collision rules.
+- **Circular particle** against axis-aligned tile walls; collision uses tile sampling at particle
+  radius.
+- **Fixed internal timestep** — frame-rate independent integration.
+- **Diagonal keyboard input** — axis keys combine without normalization, so diagonal motion can
+  exceed single-axis speed (documented deviation from ideal vector magnitude).
 
-Switching modes clears unused vectors (e.g. switching to Position zeros velocity and acceleration).
+## References
+
+- Two-dimensional kinematics and motion graphs, introductory mechanics (e.g. Halliday, Resnick &
+  Walker, Ch. 4).
+- PhET Interactive Simulations, [*Maze Game*](https://phet.colorado.edu/en/simulations/maze-game)
+  (University of Colorado) — original Java simulation this port reimplements.

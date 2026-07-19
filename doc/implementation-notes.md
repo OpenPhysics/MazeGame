@@ -1,89 +1,112 @@
-# Implementation Notes - Maze Game Simulation
+# Implementation Notes - Maze Game
 
-SceneryStack port of [PhET Maze Game](https://phet.colorado.edu/en/simulations/maze-game). Brand: `made-with-scenerystack`. Build: Vite 8 + TypeScript 6.
+Developer-facing notes on the architecture. The physics itself is documented for educators in
+[model.md](./model.md).
 
-## Bootstrap
+## Architecture Overview
 
-Import order is critical: `main.ts` must import `./brand.js` first (`brand → splash → assert → init`).
+Maze Game is a single-screen SceneryStack port of PhET's *Maze Game* (PIXI original). It adds
+substantial accessibility (interactive description, dynamic alerts, keyboard help) beyond the
+legacy HTML5 build.
 
-## Architecture
+```
+src/
+  main.ts, brand.ts, splash.ts, assert.ts, init.ts     brand → splash → assert → init
+  MazeGameColors.ts, MazeGameNamespace.ts
+  i18n/StringManager.ts, strings_*.json
+  preferences/                                          particle trace, query params
+  maze-game/
+    MazeGameScreen.ts
+    MazeGameLayoutConstants.ts                          view layout (RIGHT_COLUMN_WIDTH, etc.)
+    model/
+      MazeGameModel.ts              TModel: step, win/collision, level/mode
+      Particle.ts                   position / velocity / acceleration Properties
+      Level.ts                      tile grid, collision, bisection push-back
+      Levels.ts, TileType.ts        four ASCII layouts
+      ControlMode.ts
+      MazeGameConstants.ts          physics + panel chrome
+    view/
+      MazeGameScreenView.ts         layout, sound, keyboard, disposal
+      ArenaNode.ts, ArenaPaints.ts  maze rendering, particle drag, help callout
+      ControlPanel.ts, LevelSelector.ts, HudNode.ts
+      MazeGameScreenSummaryContent.ts, MazeGameKeyboardHelpContent.ts
+      MazeGameInfoDialog.ts
+    a11y/
+      MazeGameDescriber.ts          dynamic alerts + utteranceQueue
+      createA11yDerivedProperties.ts
+    keyboard/
+      applyMazeGameKeyboardInput.ts, MazeGameHotkeyData.ts
+    sound/
+      createSonificationProperties.ts
+```
 
-| Layer | Location |
-|-------|----------|
-| Model | `src/maze-game/model/` |
-| View | `src/maze-game/view/` |
-| Accessibility | `src/maze-game/a11y/` |
-| Keyboard | `src/maze-game/keyboard/` |
-| Sound | `src/maze-game/sound/` |
-| Preferences | `src/maze-game/preferences/` |
-| Screen | `src/maze-game/MazeGameScreen.ts` |
-| Layout constants | `src/maze-game/MazeGameLayoutConstants.ts` |
-| Strings | `src/i18n/strings_*.json` via `StringManager` |
-| Colors | `src/MazeGameColors.ts` |
+Data flows Model → View through read-only exported Properties on `MazeGameModel`; control setters
+mutate internal Properties.
 
-## Model
+## Key design decisions
 
-- `MazeGameModel` — fixed-timestep physics (`FIXED_DT`, `MAX_CATCHUP_STEPS`), win/collision logic
-- `Level` — tile grid, collision queries, bisection push-back
-- `Particle` — `Vector2Property` for position, velocity, acceleration
-- `MazeGameConstants` — physics, keyboard keys, sound levels, panel chrome (`PANEL_*`, `HUD_PANEL_Y_MARGIN`)
+- **Fixed timestep.** `FIXED_DT` with `MAX_CATCHUP_STEPS`; `step` no-ops after win.
+- **Collision counting.** `previousColliding` flag — increment only on false → true transitions.
+  Pre-push-back overlap counts as contact even though bisection leaves the particle free.
+- **Win invariant.** `wonProperty` requires `collisions === 0` and finish-tile overlap; asserted
+  in `assertStepInvariants`.
+- **Mode switch UX.** `lazyLink` on control mode zeros dormant vectors (Position → v,a = 0;
+  Velocity → a = 0).
+- **Level change.** Resets particle to start tile, collisions, timer, win flag; bumps
+  `gameGenerationProperty` for view cleanup.
+- **Nested constants (documented deviation).** Physics in `src/maze-game/model/MazeGameConstants.ts`;
+  layout in `src/maze-game/MazeGameLayoutConstants.ts` — no root `MazeGameConstants.ts`.
+- **Keyboard shared handler.** `applyMazeGameKeyboardInput` used by screen view and focused
+  control pad; diagonal keys sum axis components without normalization (√2 speed on diagonals).
 
-## View / Layout
+## View components
 
-- `MazeGameScreenView` relayouts on `visibleBoundsProperty` changes; arena scale uses space left of a 240 px right column (`MazeGameLayoutConstants.RIGHT_COLUMN_WIDTH`).
-- View typography and arrow sizes live in `MazeGameLayoutConstants`; physics and panel chrome in `MazeGameConstants`.
+- **MazeGameScreenView** — relayout on `visibleBoundsProperty`; arena scales in space left of
+  240 px right column; wires tambo clips (collision, win, mode change) and velocity
+  sonification via `createSonificationProperties`.
+- **ArenaNode** — `ModelViewTransform2`, particle drag, trace preference, mode help callout,
+  expanded 44 px touch area.
+- **ControlPanel** — mode tabs, square drag pad (`padLayer` listener), local keyboard listener.
+- **HudNode** — time and collision displays with `PatternStringProperty`.
+- **LevelSelector** — four levels from `Levels.ts`.
 
-## Sound
+Input disabled after win (`wonProperty`).
 
-- `MazeGameScreenView` wires tambo `SoundClip`s for collision, win, and control-mode change.
-- `createSonificationProperties` maps velocity magnitude to a continuous playback-rate sound.
+## Disposal conventions
 
-## Listeners and Disposal
-
-The sim has a single screen that lives for the app lifetime. Disposal is implemented defensively for CRC compliance:
+Defensive disposal for CRC compliance despite single-screen lifetime:
 
 | Class | Cleanup |
-|-------|---------|
-| `MazeGameScreenView` | KeyboardListener, SoundClips, child view `dispose()`; model links use `{ disposer: this }` |
-| `ArenaNode` | DerivedProperties, Multilink, DragListener, help-callout animation; Property links use `{ disposer: this }` |
-| `ControlPanel` | Multilink, pad DragListener; mode link uses `{ disposer: this }` |
-| `HudNode` | DerivedProperties, NumberDisplays; visibility links use `{ disposer: this }` |
-| `MazeGameModel` | `levelProperty`, `isLastLevelProperty`, lazyLinks unlinked in `dispose()` |
-| `MazeGameDescriber` | DerivedProperties, model property links via `{ disposer: this }` |
-
-## Input Behavior
-
-- Keyboard, control pad, and particle drag are **disabled after win** (`wonProperty`).
-- Control pad drag listener is on the full pad (`padLayer`), not just the knob.
-- Particle `touchArea` expanded to 44 px diameter (`PARTICLE_MIN_TOUCH_RADIUS_VIEW`).
-- Shared keyboard handler: `applyMazeGameKeyboardInput` (used by screen view and control pad focus).
+|---|---|
+| `MazeGameScreenView` | KeyboardListener, SoundClips, child `dispose()`; model links `{ disposer: this }` |
+| `ArenaNode` | DerivedProperties, Multilink, DragListener, callout animation |
+| `ControlPanel` | Multilink, pad DragListener |
+| `HudNode` | DerivedProperties, NumberDisplays |
+| `MazeGameModel` | unlinks `lazyLink` handlers; disposes DerivedProperties and `Particle` |
+| `MazeGameDescriber` | DerivedProperties, model links |
 
 ## Accessibility
 
-- **Screen summary**: `MazeGameScreenSummaryContent` describes the play area, control area, current details (level, mode, collisions, win), and interaction hints at the top of the PDOM.
-- **PDOM order**: `pdomPlayAreaNode` → arena; `pdomControlAreaNode` → control panel, level selector, HUD, info button, reset-all.
-- **Help text**: Mode-dependent `accessibleHelpText` on the particle, control pad, and mode tabs; static help on level selector and particle-trace preference.
-- **Dynamic names**: HUD time and collision displays use `PatternStringProperty` with live values.
-- **Alerts**: `MazeGameDescriber` announces collisions, wins, level changes, and control-mode changes via `addAccessibleResponse` / `utteranceQueue`; collision haptics via the Web Vibration API when available.
-- **Particle help callout**: Clicking the particle in `ArenaNode` shows a mode-specific visual callout (also voiced when Voicing is on); fades after a few seconds or on reset.
-- **Control pad focus**: Pad is focusable (`ariaRole: application`) with a local `KeyboardListener` delegating to shared `applyMazeGameKeyboardInput`.
-- **Keyboard help**: Custom particle section in the keyboard-help dialog.
-- **A11y View**: `public/a11y-view.html` — side-by-side PDOM mirror and live alert log for development QA.
-- **Manual testing**: `?ea`, `?stringTest=double|long`, Tab through PDOM, screen reader for dynamic values and alerts.
+Reference implementation for the [OpenPhysics accessibility convention](https://github.com/OpenPhysics/Baton/blob/main/ACCESSIBILITY.md):
 
-## Internationalization
-
-- Locales: `en`, `fr` (compile-time key parity in `StringManager`).
-- Dynamic locale via `PreferencesModel.supportsDynamicLocale`.
+- **Screen summary** — `MazeGameScreenSummaryContent` via `screenSummaryContent` super-option.
+- **PDOM order** — `pdomPlayAreaNode` (arena) → `pdomControlAreaNode` (panel, level, HUD, info, reset).
+- **Dynamic alerts** — `MazeGameDescriber` (collisions, wins, level/mode changes); collision
+  haptics via Web Vibration API when available.
+- **A11y View** — `public/a11y-view.html` (PDOM mirror + alert log, development QA).
+- Manual CRC recipes: `doc/query-parameter-testing.md` (`?ea`, `?fuzz&ea`, `?stringTest=`, etc.).
 
 ## Testing
 
-- Unit tests: `Level.test.ts`, `MazeGameModel.test.ts` (Vitest).
-- Manual CRC query params: `?ea`, `?fuzz&ea`, `?listenerOrder=random`, `?stringTest=dynamic|X|double|long|rtl`, `?showPointerAreas`.
-- Automated smoke: `npm run test:query-params` (headless Playwright; set `MAZE_GAME_URL` if preview uses another port).
-- Full guide: [query-parameter-testing.md](query-parameter-testing.md) (recipes, code paths, test matrix).
+`npm test` (vitest):
 
-## Known Deviations from Original PhET
+- `tests/maze-game/model/Level.test.ts` — tile collision, bisection push-back
+- `tests/maze-game/model/MazeGameModel.test.ts` — integration modes, win/collision logic
+- `tests/memory-leak.test.ts` — WeakRef/GC regression suite
 
-- Diagonal keyboard input sums axis components without normalization (√2× magnitude on diagonals).
-- About-dialog credits are English-only in `main.ts` (not in JSON strings).
+`npm run test:query-params` — headless Playwright smoke tests for query parameters (set
+`MAZE_GAME_URL` if preview uses a non-default port).
+
+## Multi-screen simulations
+
+Single-screen.
