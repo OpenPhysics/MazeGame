@@ -113,3 +113,6 @@ const MazeGameConstants = {
 } as const;
 
 export default MazeGameConstants;
+
+/** Corner radius shared by themed panels (px). */
+export const PANEL_CORNER_RADIUS = MazeGameConstants.PANEL_CORNER_RADIUS;
