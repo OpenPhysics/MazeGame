@@ -48,6 +48,10 @@ npm test                   # Vitest (model collision & game logic)
 npm run test:query-params  # Headless Playwright query-param smoke tests
 ```
 
+## Compliance carve-outs
+
+- **Nested constants:** `src/maze-game/model/MazeGameConstants.ts` — level/physics constants co-located with the maze model.
+
 ## Testing
 
 Fleet-standard Vitest layout:
