@@ -99,6 +99,24 @@ const MazeGameColors = {
 
   // Preferences toggle switch (on state).
   toggleSwitchTrackFillRightProperty: profileColor("toggleSwitchTrackFillRight", "#64bd5a", "#64bd5a"),
+
+  // Fleet-standard aliases for shared Panel + ButtonOptions modules.
+  panelBackgroundColorProperty: profileColor("panelBackground", PANEL_FILL_DARK, PANEL_FILL_LIGHT),
+  panelBorderColorProperty: profileColor("panelBorder", PANEL_STROKE_DARK, PANEL_STROKE_LIGHT),
+  textColorProperty: profileColor("text", WHITE, BLACK),
+
+  // ── Light control surfaces ───────────────────────────────────────────────────
+  // White chrome (combo boxes, flat push buttons, editable input fields) stays light
+  // in both profiles; its text stays dark.
+
+  /** Fill of light control surfaces: combo-box button/list, editable input fields. */
+  controlSurfaceColorProperty: profileColor("controlSurface", "#ffffff", "#ffffff"),
+
+  /** Fill of a disabled control surface (grayed-out editable input field). */
+  controlSurfaceDisabledColorProperty: profileColor("controlSurfaceDisabled", "#cccccc", "#cccccc"),
+
+  /** Text on light control surfaces: combo items, flat-button labels, field values, preferences. */
+  controlSurfaceTextColorProperty: profileColor("controlSurfaceText", "#1a1a1a", "#1a1a1a"),
 };
 
 export default MazeGameColors;

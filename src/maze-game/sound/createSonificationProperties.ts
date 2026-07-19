@@ -6,8 +6,8 @@
 
 import { DerivedProperty, type TReadOnlyProperty } from "scenerystack/axon";
 import { Tandem } from "scenerystack/tandem";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import { ControlMode } from "../model/ControlMode.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 
 export const createVelocityMagnitudeSonificationProperty = (model: MazeGameModel): TReadOnlyProperty<number> => {

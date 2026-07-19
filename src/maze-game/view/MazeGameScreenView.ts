@@ -37,13 +37,14 @@ import {
   wallContact_mp3,
 } from "scenerystack/tambo";
 import type { Tandem } from "scenerystack/tandem";
+import { FLAT_RESET_ALL_BUTTON_OPTIONS } from "../../common/MazeGameButtonOptions.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import MazeGameColors from "../../MazeGameColors.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import MazeGameDescriber from "../a11y/MazeGameDescriber.js";
 import { applyMazeGameKeyboardInput } from "../keyboard/applyMazeGameKeyboardInput.js";
 import MazeGameHotkeyData from "../keyboard/MazeGameHotkeyData.js";
 import MazeGameLayoutConstants from "../MazeGameLayoutConstants.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 import {
   createVelocityMagnitudeSonificationProperty,
@@ -175,6 +176,7 @@ export class MazeGameScreenView extends ScreenView {
     });
 
     this.resetAllButton = new ResetAllButton({
+      ...FLAT_RESET_ALL_BUTTON_OPTIONS,
       baseColor: MazeGameColors.resetAllButtonColorProperty,
       listener: (): void => {
         this.interruptSubtreeInput();

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import MazeGameConstants from "../../../src/MazeGameConstants.js";
 import Level from "../../../src/maze-game/model/Level.js";
-import MazeGameConstants from "../../../src/maze-game/model/MazeGameConstants.js";
 import { TileType } from "../../../src/maze-game/model/TileType.js";
 
 const charToTile: Record<string, TileType> = {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import MazeGameConstants from "../../../src/MazeGameConstants.js";
 import { ControlMode } from "../../../src/maze-game/model/ControlMode.js";
 import { LevelKey } from "../../../src/maze-game/model/Levels.js";
-import MazeGameConstants from "../../../src/maze-game/model/MazeGameConstants.js";
 import { MazeGameModel } from "../../../src/maze-game/model/MazeGameModel.js";
 
 const FIXED_DT: number = MazeGameConstants.FIXED_DT;

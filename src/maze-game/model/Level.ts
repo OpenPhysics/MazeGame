@@ -9,7 +9,7 @@
  */
 
 import { assert, assertSlow } from "scenerystack/assert";
-import MazeGameConstants from "./MazeGameConstants.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import { TileType } from "./TileType.js";
 
 const { TILE_SIZE, LEVEL_WIDTH, LEVEL_HEIGHT } = MazeGameConstants;

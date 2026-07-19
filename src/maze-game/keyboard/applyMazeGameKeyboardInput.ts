@@ -4,8 +4,8 @@
  * Shared keyboard input logic for the global listener and the focused control pad.
  */
 
+import MazeGameConstants from "../../MazeGameConstants.js";
 import { ControlMode } from "../model/ControlMode.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 
 type AxisKey = keyof typeof MazeGameConstants.KEYBOARD_AXIS_BY_KEY;

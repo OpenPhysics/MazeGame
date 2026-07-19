@@ -51,7 +51,7 @@ each locale JSON, via `StringManager.getA11yStrings()`.
 
 ## Compliance carve-outs
 
-- **Nested constants:** `src/maze-game/model/MazeGameConstants.ts` (physics) and `src/maze-game/MazeGameLayoutConstants.ts` (layout) — co-located with consumers; no root `MazeGameConstants.ts`.
+- **Nested constants:** `src/MazeGameConstants.ts` (physics) and `src/maze-game/MazeGameLayoutConstants.ts` (layout) — co-located with consumers; no root `MazeGameConstants.ts`.
 
 ## Testing
 

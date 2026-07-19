@@ -14,8 +14,8 @@ import { Panel, type PanelOptions } from "scenerystack/sun";
 import { ElapsedTimeNode, GameTimer } from "scenerystack/vegas";
 import { StringManager } from "../../i18n/StringManager.js";
 import MazeGameColors from "../../MazeGameColors.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import MazeGameLayoutConstants from "../MazeGameLayoutConstants.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 
 type HudNodeSelfOptions = {

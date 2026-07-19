@@ -54,7 +54,7 @@ mutate internal Properties.
   Velocity → a = 0).
 - **Level change.** Resets particle to start tile, collisions, timer, win flag; bumps
   `gameGenerationProperty` for view cleanup.
-- **Nested constants (documented deviation).** Physics in `src/maze-game/model/MazeGameConstants.ts`;
+- **Nested constants (documented deviation).** Physics in `src/MazeGameConstants.ts`;
   layout in `src/maze-game/MazeGameLayoutConstants.ts` — no root `MazeGameConstants.ts`.
 - **Keyboard shared handler.** `applyMazeGameKeyboardInput` used by screen view and focused
   control pad; diagonal keys sum axis components without normalization (√2 speed on diagonals).

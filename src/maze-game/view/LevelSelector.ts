@@ -13,9 +13,9 @@ import { AquaRadioButtonGroup, Panel, type PanelOptions } from "scenerystack/sun
 import { Tandem } from "scenerystack/tandem";
 import { StringManager } from "../../i18n/StringManager.js";
 import MazeGameColors from "../../MazeGameColors.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import MazeGameLayoutConstants from "../MazeGameLayoutConstants.js";
 import { LEVEL_KEYS, LevelKey } from "../model/Levels.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 
 const TITLE_FONT = new PhetFont({

@@ -12,7 +12,7 @@ import type { Node } from "scenerystack/scenery";
 import { voicingUtteranceQueue } from "scenerystack/scenery";
 import { Utterance } from "scenerystack/utterance-queue";
 import { StringManager } from "../../i18n/StringManager.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 import { createControlModeNameStringProperty, createLevelNameStringProperty } from "./createA11yDerivedProperties.js";
 

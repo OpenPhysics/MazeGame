@@ -9,10 +9,10 @@
 import { assert } from "scenerystack/assert";
 import { BooleanProperty, DerivedProperty, NumberProperty, Property, type ReadOnlyProperty } from "scenerystack/axon";
 import type { TModel } from "scenerystack/joist";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import { ControlMode } from "./ControlMode.js";
 import type Level from "./Level.js";
 import { LEVEL_KEYS, LEVELS, LevelKey } from "./Levels.js";
-import MazeGameConstants from "./MazeGameConstants.js";
 import Particle from "./Particle.js";
 import { TileType } from "./TileType.js";
 

@@ -31,12 +31,12 @@ import { Animation, Easing } from "scenerystack/twixt";
 import { Utterance } from "scenerystack/utterance-queue";
 import { StringManager } from "../../i18n/StringManager.js";
 import MazeGameColors, { TRANSPARENT_COLOR } from "../../MazeGameColors.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import { particleTraceEnabledProperty } from "../../preferences/MazeGamePreferencesModel.js";
 import { createModeDependentHelpTextProperty } from "../a11y/createA11yDerivedProperties.js";
 import MazeGameLayoutConstants from "../MazeGameLayoutConstants.js";
 import { ControlMode } from "../model/ControlMode.js";
 import type Level from "../model/Level.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 import { TileType } from "../model/TileType.js";
 import {

@@ -13,7 +13,7 @@
 import { assert } from "scenerystack/assert";
 import { BooleanProperty, type ReadOnlyProperty } from "scenerystack/axon";
 import { Vector2, Vector2Property } from "scenerystack/dot";
-import MazeGameConstants from "./MazeGameConstants.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 
 const assertFiniteXY = (x: number, y: number, label: string): void => {
   assert?.(Number.isFinite(x) && Number.isFinite(y), `${label} must be finite`);

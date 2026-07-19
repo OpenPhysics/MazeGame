@@ -21,12 +21,12 @@ import { Panel, type PanelOptions, RectangularRadioButtonGroup } from "sceneryst
 import { Tandem } from "scenerystack/tandem";
 import { StringManager } from "../../i18n/StringManager.js";
 import MazeGameColors from "../../MazeGameColors.js";
+import MazeGameConstants from "../../MazeGameConstants.js";
 import { createModeDependentHelpTextProperty } from "../a11y/createA11yDerivedProperties.js";
 import { applyMazeGameKeyboardInput } from "../keyboard/applyMazeGameKeyboardInput.js";
 import MazeGameHotkeyData from "../keyboard/MazeGameHotkeyData.js";
 import MazeGameLayoutConstants from "../MazeGameLayoutConstants.js";
 import { ControlMode } from "../model/ControlMode.js";
-import MazeGameConstants from "../model/MazeGameConstants.js";
 import type { MazeGameModel } from "../model/MazeGameModel.js";
 
 const AREA = MazeGameConstants.REMOTE_PAD_SIZE;
