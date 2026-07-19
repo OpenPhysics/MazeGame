@@ -84,8 +84,8 @@ const MazeGameColors = {
   // Warning text when a collision locks the player out of winning.
   collisionWarningColorProperty: profileColor("collisionWarning", "#ff7043", "#b71c1c"),
 
-  // Reset Level button — same hue across themes.
-  resetLevelButtonColorProperty: profileColor("resetLevelButton", "#f6e652", "#f6e652"),
+  // Reset Level button — slightly darker in projector for contrast on white chrome.
+  resetLevelButtonColorProperty: profileColor("resetLevelButton", "#f6e652", "#d4c020"),
 
   // Next Level button.
   nextLevelButtonColorProperty: profileColor("nextLevelButton", "#66bb6a", "#388e3c"),
@@ -97,8 +97,8 @@ const MazeGameColors = {
   // Reset All button (bottom-right).
   resetAllButtonColorProperty: profileColor("resetAllButton", "#ff9800", "#ef6c00"),
 
-  // Preferences toggle switch (on state).
-  toggleSwitchTrackFillRightProperty: profileColor("toggleSwitchTrackFillRight", "#64bd5a", "#64bd5a"),
+  // Preferences toggle switch (on state) — darker green in projector for white backgrounds.
+  toggleSwitchTrackFillRightProperty: profileColor("toggleSwitchTrackFillRight", "#64bd5a", "#3d9b45"),
 
   // Fleet-standard aliases for shared Panel + ButtonOptions modules.
   panelBackgroundColorProperty: profileColor("panelBackground", PANEL_FILL_DARK, PANEL_FILL_LIGHT),
