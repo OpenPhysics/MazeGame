@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
-    "@rolldown/binding-linux-x64-gnu": "^1.2.0",
     "@types/node": "^26.1.1",
     "happy-dom": "^20.11.1",
     "jsdom": "^30.0.0",

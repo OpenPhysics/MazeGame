@@ -52,6 +52,7 @@ each locale JSON, via `StringManager.getA11yStrings()`.
 ## Compliance carve-outs
 
 - **Nested constants:** `src/MazeGameConstants.ts` (physics) and `src/maze-game/MazeGameLayoutConstants.ts` (layout) — co-located with consumers; no root `MazeGameConstants.ts`.
+- **Rolldown native binding (`postinstall`):** Vite 8 ships Rolldown native bindings as nested optional deps that npm sometimes skips. `scripts/ensure-rolldown-binding.mjs` (run from the `postinstall` npm script) detects the current OS/CPU and `npm install --no-save`s the matching `@rolldown/binding-<platform>` when it is missing, so the build works on Linux/macOS/Windows without pinning a platform-specific binary in `devDependencies`.
 
 ## Testing
 
