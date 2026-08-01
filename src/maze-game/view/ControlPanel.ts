@@ -279,6 +279,9 @@ export default class ControlPanel extends Panel {
       setTip(tipFromModel());
     };
 
+    // The virtual joystick is pointer-only. Arrows/WASD already drive the particle through
+    // MazeGameHotkeyData.MOVE_PARTICLE (a global hotkey documented in the keyboard help), so a
+    // RichDragListener here would bind the arrow keys a second time and both handlers would fire.
     this.padDragListener = new DragListener({
       start: (): void => {
         if (model.wonProperty.value) {
