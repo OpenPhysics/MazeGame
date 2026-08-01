@@ -25,21 +25,26 @@
  *   const panel = new MazeGamePanel(content, { fill: "transparent" });
  */
 
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import type { Node } from "scenerystack/scenery";
-import type { PanelOptions } from "scenerystack/sun";
-import { Panel } from "scenerystack/sun";
+import { Panel, type PanelOptions } from "scenerystack/sun";
 import MazeGameColors from "../MazeGameColors.js";
 import { PANEL_CORNER_RADIUS } from "../MazeGameConstants.js";
 
+export type MazeGamePanelOptions = PanelOptions;
+
 export class MazeGamePanel extends Panel {
-  public constructor(content: Node, providedOptions?: PanelOptions) {
-    super(content, {
-      fill: MazeGameColors.panelBackgroundColorProperty,
-      stroke: MazeGameColors.panelBorderColorProperty,
-      cornerRadius: PANEL_CORNER_RADIUS,
-      xMargin: 12,
-      yMargin: 10,
-      ...providedOptions,
-    });
+  public constructor(content: Node, providedOptions?: MazeGamePanelOptions) {
+    const options = optionize<MazeGamePanelOptions, EmptySelfOptions, PanelOptions>()(
+      {
+        fill: MazeGameColors.panelBackgroundColorProperty,
+        stroke: MazeGameColors.panelBorderColorProperty,
+        cornerRadius: PANEL_CORNER_RADIUS,
+        xMargin: 12,
+        yMargin: 10,
+      },
+      providedOptions,
+    );
+    super(content, options);
   }
 }
