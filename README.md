@@ -1,5 +1,7 @@
 # Maze Game
 
+[![CI](https://github.com/OpenPhysics/MazeGame/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenPhysics/MazeGame/actions/workflows/ci.yml)
+
 A SceneryStack port of the PhET [Maze Game](https://phet.colorado.edu/en/simulations/maze-game) simulation.
 Drive a particle through tile-based mazes using position, velocity, or acceleration control modes.
 
