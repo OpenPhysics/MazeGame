@@ -161,7 +161,8 @@ function addInlineAttributes(rootNode) {
           }
         }
       } else {
-        element.innerHTML = ariaLabel + element.innerHTML;
+        const labelText = document.createTextNode(ariaLabel);
+        element.insertBefore(labelText, element.firstChild);
       }
     }
 
@@ -411,6 +412,10 @@ function waitForPdomRoot(innerWindow, maxAttempts = 200) {
  * @param {MessageEvent} event
  */
 async function handleSimLoadMessage(event) {
+  if (event.origin !== window.location.origin) {
+    return;
+  }
+
   if (!event.data) {
     return;
   }
