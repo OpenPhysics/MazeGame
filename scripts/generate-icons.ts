@@ -46,3 +46,24 @@ writeFileSync(resolve(root, "public/favicon.ico"), icoBuffer);
 console.log("✓ public/favicon.ico");
 
 console.log("\nAll icons generated successfully.");
+
+/** Branded placeholder screenshots for the Web App Manifest `screenshots` member. */
+async function writeScreenshot(width: number, height: number, file: string): Promise<void> {
+  const iconSize = Math.round(Math.min(width, height) * 0.4);
+  const icon = await sharp(svg, { density }).resize(iconSize, iconSize).png().toBuffer();
+  await sharp({
+    create: {
+      width,
+      height,
+      channels: 4,
+      background: THEME_BG,
+    },
+  })
+    .composite([{ input: icon, gravity: "center" }])
+    .png()
+    .toFile(resolve(publicDir, file));
+}
+
+mkdirSync(resolve(publicDir, "screenshots"), { recursive: true });
+await writeScreenshot(1280, 720, "screenshots/wide.png");
+await writeScreenshot(720, 1280, "screenshots/narrow.png");
