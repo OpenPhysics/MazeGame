@@ -98,7 +98,3 @@ npm run test:query-params   # headless Playwright query-param smoke tests
 ```
 
 `npm run release` intentionally skips `npm test` in some sims — append `&& npm test` before the version bump so a release cannot ship a failing suite.
-
-## Development notes
-
-- `public/a11y-view.html` is a development-only PDOM mirror + alert log.

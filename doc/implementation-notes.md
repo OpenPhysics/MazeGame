@@ -93,8 +93,9 @@ Reference implementation for the [OpenPhysics accessibility convention](https://
 - **PDOM order** — `pdomPlayAreaNode` (arena) → `pdomControlAreaNode` (panel, level, HUD, info, reset).
 - **Dynamic alerts** — `MazeGameDescriber` (collisions, wins, level/mode changes); collision
   haptics via Web Vibration API when available.
-- **A11y View** — `public/a11y-view.html` (PDOM mirror + alert log, development QA).
 - Manual CRC recipes: `doc/query-parameter-testing.md` (`?ea`, `?fuzz&ea`, `?stringTest=`, etc.).
+  Inspect the PDOM in DevTools or via the joist Helper (**Ctrl+Shift+H**); log alerts with
+  `?logInteractiveDescriptionResponses`.
 
 ## Testing
 

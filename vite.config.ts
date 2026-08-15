@@ -8,7 +8,7 @@ import { VitePWA } from "vite-plugin-pwa";
  *  - CSP: restrict resource loading to same-origin + known blob/data exceptions
  *  - Referrer / Permissions: tighten default browser leakage
  *  - X-Content-Type-Options: prevent MIME sniffing
- *  - X-Frame-Options: allow same-origin framing for a11y-view.html iframe embedding
+ *  - X-Frame-Options: prevent clickjacking (belt-and-suspenders alongside frame-ancestors)
  */
 const securityHeaders: Record<string, string> = {
   "Cross-Origin-Opener-Policy": "same-origin",
@@ -36,11 +36,12 @@ const securityHeaders: Record<string, string> = {
     "font-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
-    // Same-origin framing allows public/a11y-view.html to embed the sim in an iframe.
-    "frame-ancestors 'self'",
+    "frame-ancestors 'none'",
   ].join("; "),
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
   "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "SAMEORIGIN",
+  "X-Frame-Options": "DENY",
 };
 
 /** Single-file mode: inline every imported asset as base64 (effectively unlimited). */
