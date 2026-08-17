@@ -35,12 +35,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:query-params": "node scripts/check-query-params.mjs",
+    "test:fuzz": "playwright test --project=chromium",
+    "test:fuzz:quick": "FUZZ_DURATION=10 playwright test --project=chromium",
     "icons": "tsx scripts/generate-icons.ts",
     "clean": "rm -rf dist",
     "postinstall": "node scripts/ensure-rolldown-binding.mjs",
-    "prepare": "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && git config core.hooksPath .githooks || true",
-    "test:fuzz": "playwright test --project=chromium",
-    "test:fuzz:quick": "FUZZ_DURATION=10 playwright test --project=chromium"
+    "prepare": "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && git config core.hooksPath .githooks || true"
   },
   "dependencies": {
     "scenerystack": "^3.0.0"
